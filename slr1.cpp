@@ -23,25 +23,26 @@ extern bool slr1(const char *fname)
 {
     open(fname);
     
-    action ac_s = { .type = op_s };
-    action ac_f1 = { .type = op_r, .generator = fact, .n = 1 };
-    action ac_f2 = { .type = op_r, .generator = fact, .n = 2 };
-    action ac_f3 = { .type = op_r, .generator = fact, .n = 3 };
-    action ac_t1 = { .type = op_r, .generator = term, .n = 1 };
-    action ac_t3 = { .type = op_r, .generator = term, .n = 3 };
-    action ac_e1 = { .type = op_r, .generator = exp, .n = 1 };
-    action ac_e3 = { .type = op_r, .generator = exp, .n = 3 };
-    action ac_r1 = { .type = op_r, .generator = rel, .n = 1 };
-    action ac_r3 = { .type = op_r, .generator = rel, .n = 3 };
-    action ac_r4 = { .type = op_r, .generator = rel, .n = 4 };
-    action ac_c1 = { .type = op_r, .generator = clause, .n = 1 };
-    action ac_c3 = { .type = op_r, .generator = clause, .n = 3 };
-    action ac_p1 = { .type = op_r, .generator = prop, .n = 1 };
-    action ac_p3 = { .type = op_r, .generator = prop, .n = 3 };
-    action ac_q1 = { .type = op_r, .generator = quest, .n = 1 };
-    action ac_q5 = { .type = op_r, .generator = quest, .n = 5 };
-    action ac_a = { .type = op_a };
-    action ac_e = { .type = op_e };
+    /* Actions */
+    action ac_s = { .type = op_s }; // Shift
+    action ac_a = { .type = op_a }; // Accept
+    action ac_e = { .type = op_e }; // Error
+    action ac_f1 = { .type = op_r, .generator = fact, .n = 1 };   // R(fact, 1)
+    action ac_f2 = { .type = op_r, .generator = fact, .n = 2 };   // R(fact, 2)
+    action ac_f3 = { .type = op_r, .generator = fact, .n = 3 };   // R(fact, 3)
+    action ac_t1 = { .type = op_r, .generator = term, .n = 1 };   // R(term, 1)
+    action ac_t3 = { .type = op_r, .generator = term, .n = 3 };   // R(term, 3)
+    action ac_e1 = { .type = op_r, .generator = exp, .n = 1 };    // R(exp, 1)
+    action ac_e3 = { .type = op_r, .generator = exp, .n = 3 };    // R(exp, 3)
+    action ac_r1 = { .type = op_r, .generator = rel, .n = 1 };    // R(reduce, 1)
+    action ac_r3 = { .type = op_r, .generator = rel, .n = 3 };    // R(reduce, 3)
+    action ac_r4 = { .type = op_r, .generator = rel, .n = 4 };    // R(reduce, 4)
+    action ac_c1 = { .type = op_r, .generator = clause, .n = 1 }; // R(clause, 1)
+    action ac_c3 = { .type = op_r, .generator = clause, .n = 3 }; // R(clause, 3)
+    action ac_p1 = { .type = op_r, .generator = prop, .n = 1 };   // R(prop, 1)
+    action ac_p3 = { .type = op_r, .generator = prop, .n = 3 };   // R(prop, 3)
+    action ac_q1 = { .type = op_r, .generator = quest, .n = 1 };  // R(quest, 1)
+    action ac_q5 = { .type = op_r, .generator = quest, .n = 5 };  // R(quest, 5)
     
     action T[49][20] = {
         /*           ?    :    or    and    =    !      <    >      +     -    *     /    not    (     )    num    id   FALSE TRUE   $  */
@@ -98,7 +99,7 @@ extern bool slr1(const char *fname)
     
     int R[49][27] = {
         /*         ?   :  or  and   =   !  <    >   +   -   *   /   not  (   ) num  id FALSE TRUE main quest prop clause rel exp term fact  */
-        /* 0 */  { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1,  1,  2,  3,  4,  5,  6, 7 },
+        /* 0 */  { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1,  1,  2,  3,  4,  5,  6,  7 },
         /* 1 */  { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 2 */  { 15, -1, 16, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 3 */  { -1, -1, -1, 17, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
@@ -113,10 +114,10 @@ extern bool slr1(const char *fname)
         /* 12 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 13 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 14 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-        /* 15 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, 29,  2,  3,  4,  5,  6, 7 },
-        /* 16 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, -1, -1, 30,  4,  5,  6, 7 },
-        /* 17 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, -1, -1, -1, 31,  5,  6, 7 },
-        /* 18 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, -1, -1, -1, -1, -1, 32, 7 },
+        /* 15 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, 29,  2,  3,  4,  5,  6,  7 },
+        /* 16 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, -1, -1, 30,  4,  5,  6,  7 },
+        /* 17 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, -1, -1, -1, 31,  5,  6,  7 },
+        /* 18 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, -1, -1, -1, -1, -1, 32,  7 },
         /* 19 */ { -1, -1, -1, -1, 33, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 20 */ { -1, -1, -1, -1, 34, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 21 */ { -1, -1, -1, -1, 36, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, -1, -1, -1, -1, 35,  6,  7 },
@@ -141,7 +142,7 @@ extern bool slr1(const char *fname)
         /* 40 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 41 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 42 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
-        /* 43 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, 48,  2,  3,  4,  5,  6, 7 },
+        /* 43 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1,  8, -1, -1,  9, 10, -1, 11, 12, 13, 14, -1, 48,  2,  3,  4,  5,  6,  7 },
         /* 44 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 45 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
         /* 46 */ { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 },
