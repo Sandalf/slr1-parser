@@ -12,3 +12,9 @@ exp -> exp + term | exp - term | term
 term -> term * fact | term / fact | fact
 fact -> - fact | not fact | ( quest ) | num | id | false | true
 ```
+
+## Compilatoin
+
+```
+g++ -std=c++14 main.cpp scanner.cpp slr1.cpp -o main.o
+```
